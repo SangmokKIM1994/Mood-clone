@@ -1,13 +1,16 @@
-import { TypeOrmModuleOptions } from "@nestjs/typeorm";
+import { TypeOrmModuleOptions } from '@nestjs/typeorm';
+import * as dotenv from 'dotenv';
+
+dotenv.config();
 
 export const typeORMConfig: TypeOrmModuleOptions = {
-  type: "postgres",
-  host: "notag-test.ccitz88tut9r.ap-northeast-2.rds.amazonaws.com",
-  port: 5432,
-  username: "yeong0319",
-  password: "tkdahr45",
-  database: "notag-test",
-  entities: [__dirname + "/../**/*.entity.{js,ts}"],
+  type: 'postgres',
+  host: process.env.PG_HOST,
+  port: Number(process.env.PG_PORT),
+  username: process.env.PG_USERNAME,
+  password: process.env.PG_PASSWORD,
+  database: process.env.PG_DATABASE,
+  entities: [__dirname + '/../**/*.entity.{js,ts}'],
   synchronize: true,
   ssl: {
     rejectUnauthorized: false,
