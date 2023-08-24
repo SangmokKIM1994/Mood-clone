@@ -1,5 +1,5 @@
-import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { Users } from './users.entity';
+import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Users } from "./users.entity";
 
 @Entity()
 export class UserInfos {
@@ -18,6 +18,6 @@ export class UserInfos {
   @Column()
   myStatus: string;
 
-  @OneToOne(() => Users, user => user.userInfo)
+  @OneToOne(() => Users, (user) => user.userInfo)
   user: Users;
 }

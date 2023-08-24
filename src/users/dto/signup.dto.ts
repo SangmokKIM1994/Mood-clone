@@ -8,7 +8,7 @@ import {
   IsEmail,
 } from 'class-validator';
 
-export class SignupDto {
+export class SignUpDto {
   @ApiResponseProperty({ example: 'yeong0319' })
   @IsString()
   @MinLength(8)
