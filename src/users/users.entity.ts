@@ -4,8 +4,8 @@ import {
   JoinColumn,
   OneToOne,
   PrimaryGeneratedColumn,
-} from 'typeorm';
-import { UserInfos } from './userInfos.entity';
+} from "typeorm";
+import { UserInfos } from "./userInfos.entity";
 
 @Entity()
 export class Users {
