@@ -1,4 +1,10 @@
-import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from "typeorm";
 import { Users } from "./users.entity";
 
 @Entity()
@@ -9,7 +15,7 @@ export class UserInfos {
   @Column()
   email: string;
 
-  @Column()
+  @Column({ unique: true })
   nickname: string;
 
   @Column()
