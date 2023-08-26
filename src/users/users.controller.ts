@@ -35,7 +35,7 @@ export class UsersController {
   async login(
     @Body(ValidationPipe) id: string,
     password: string
-  ): Promise<{ message: string; nickname: string }> {
+  ): Promise<{ message: string; token: string; nickname: string }> {
     return await this.userService.login(id, password);
   }
 }
