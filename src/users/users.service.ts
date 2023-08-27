@@ -69,7 +69,20 @@ export class UsersService {
         return { nickname: userInfo.nickname, token, message: "로그인 성공" };
       }
     } catch (error) {
-      throw new NotFoundException("회원 정보가  일치하지 않습니다.");
+      throw new NotFoundException("회원 정보가 일치하지 않습니다.");
+    }
+  }
+
+  async deleteuser(userId: number): Promise<{ message: string }> {
+    try {
+      const userNickname = await this.userInfoRepository.findOne({
+        where: { user: { userId } },
+      });
+      await this.userRepository.delete({ userId });
+      await this.userInfoRepository.delete({ user: { userId } });
+      return { message: `${userNickname.nickname}의 탈퇴가 완료 되었습니다.` };
+    } catch (error) {
+      throw new NotFoundException("회원 정보가 일치하지 않습니다.");
     }
   }
 }
