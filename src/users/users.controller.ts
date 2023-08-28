@@ -17,6 +17,7 @@ import { LoginDto } from "./dto/login.dto";
 import { AuthGuard } from "@nestjs/passport";
 import { Request as ExpressRequest } from "express";
 import { Users } from "./users.entity";
+import { DeleteUserDto } from "./dto/deleteuser.dto";
 
 @ApiTags("users")
 @Controller("users")
@@ -46,7 +47,7 @@ export class UsersController {
   }
 
   @ApiOperation({ summary: "회원탈퇴" })
-  // @ApiBody({type:})
+  @ApiBody({ type: DeleteUserDto })
   @ApiResponse({ status: 200, description: "회원 탈퇴 성공" })
   @Delete("/delete")
   @UseGuards(AuthGuard("jwt"))
