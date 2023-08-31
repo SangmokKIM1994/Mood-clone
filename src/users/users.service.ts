@@ -11,6 +11,7 @@ import { UserInfos } from "./userInfos.entity";
 import * as bcrypt from "bcrypt";
 import * as jwt from "jsonwebtoken";
 import { ConfigService } from "@nestjs/config";
+import { S3Service } from "src/aws/s3.service";
 
 @Injectable()
 export class UsersService {
@@ -19,7 +20,8 @@ export class UsersService {
     private readonly userRepository: Repository<Users>,
     @InjectRepository(UserInfos)
     private readonly userInfoRepository: Repository<UserInfos>,
-    private readonly configService: ConfigService
+    private readonly configService: ConfigService,
+    private readonly s3Service: S3Service
   ) {}
 
   async signup(signUpDto: SignUpDto): Promise<{ nickname: string }> {
@@ -71,6 +73,11 @@ export class UsersService {
     } catch (error) {
       throw new NotFoundException("회원 정보가 일치하지 않습니다.");
     }
+  }
+
+  async uploadProfile(userId: number, buffer: Buffer, fileName: string) {
+    const fileUrl = this.s3Service.uploadFileToS3(buffer, fileName);
+    
   }
 
   async deleteuser(userId: number): Promise<{ message: string }> {

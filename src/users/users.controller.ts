@@ -9,6 +9,8 @@ import {
   Body,
   UseGuards,
   Req,
+  UploadedFile,
+  UseInterceptors,
 } from "@nestjs/common";
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { UsersService } from "./users.service";
@@ -18,6 +20,8 @@ import { AuthGuard } from "@nestjs/passport";
 import { Request as ExpressRequest } from "express";
 import { Users } from "./users.entity";
 import { DeleteUserDto } from "./dto/deleteuser.dto";
+import { FileInterceptor } from "@nestjs/platform-express";
+import { Express } from "express";
 
 @ApiTags("users")
 @Controller("users")
@@ -44,6 +48,23 @@ export class UsersController {
     password: string
   ): Promise<{ message: string; token: string; nickname: string }> {
     return await this.userService.login(id, password);
+  }
+
+  @ApiOperation({ summary: "회원 프로필 사진 수정" })
+  @ApiResponse({ status: 200, description: "프로필 사진 수정 완료" })
+  @Patch("/uploadprofile")
+  @UseGuards(AuthGuard("jwt"))
+  @UseInterceptors(FileInterceptor("file"))
+  async uploadProfile(
+    @Req() req: ExpressRequest & { user: Users },
+    @UploadedFile() file: Express.Multer.File
+  ) {
+    const { userId } = req.user;
+    await this.userService.uploadProfile(
+      userId,
+      file.buffer,
+      file.originalname
+    );
   }
 
   @ApiOperation({ summary: "회원탈퇴" })
