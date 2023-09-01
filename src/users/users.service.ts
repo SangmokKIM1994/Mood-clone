@@ -76,8 +76,13 @@ export class UsersService {
   }
 
   async uploadProfile(userId: number, buffer: Buffer, fileName: string) {
-    const fileUrl = this.s3Service.uploadFileToS3(buffer, fileName);
-    
+    const fileUrl = await this.s3Service.uploadFileToS3(buffer, fileName);
+    const userInfo = await this.userInfoRepository.findOne({where:{user:{userId}}})
+    if(userInfo){
+      userInfo.profileUrl = fileUrl
+      await this.userInfoRepository.save(userInfo)
+    }
+    return
   }
 
   async deleteuser(userId: number): Promise<{ message: string }> {
