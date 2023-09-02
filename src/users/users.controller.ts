@@ -39,6 +39,24 @@ export class UsersController {
     return { message: `${user.nickname}님 회원 가입이 완료 되었습니다.` };
   }
 
+  @ApiOperation({ summary: "회원 가입 시 아이디 확인" })
+  // @ApiBody({ type: SignUpDto })
+  @ApiResponse({ status: 200, description: "회원 가입 완료" })
+  @Post("/signup/idcheck")
+  async idcheck(@Body() id: string) {
+    await this.userService.checkId(id);
+    return { message: `${id}는 사용 가능한 ID입니다.` };
+  }
+
+  @ApiOperation({ summary: "회원 가입 시 아이디 확인" })
+  // @ApiBody({ type: SignUpDto })
+  @ApiResponse({ status: 200, description: "회원 가입 완료" })
+  @Post("/signup/idcheck")
+  async nicknamecheck(@Body() nickname: string) {
+    await this.userService.checkNickname(nickname);
+    return { message: `${nickname}는 사용 가능한 ID입니다.` };
+  }
+
   @ApiOperation({ summary: "로그인" })
   @ApiBody({ type: LoginDto })
   @ApiResponse({ status: 200, description: "로그인 성공" })
