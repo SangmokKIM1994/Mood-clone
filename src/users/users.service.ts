@@ -2,6 +2,7 @@ import {
   Injectable,
   ConflictException,
   NotFoundException,
+  InternalServerErrorException,
 } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Users } from "./users.entity";
@@ -48,6 +49,30 @@ export class UsersService {
     }
   }
 
+  async checkId(id: string) {
+    try {
+      const user = this.userRepository.findOne({ where: { id } });
+      if (!user) {
+        throw new ConflictException("중복된 아이디 입니다");
+      }
+      return;
+    } catch (error) {
+      throw new InternalServerErrorException("id 확인 시 서버 에러");
+    }
+  }
+
+  async checkNickname(nickname: string) {
+    try {
+      const user = this.userInfoRepository.findOne({ where: { nickname } });
+      if (!user) {
+        throw new ConflictException("중복된 닉네임 입니다");
+      }
+      return;
+    } catch (error) {
+      throw new InternalServerErrorException("서버 에러");
+    }
+  }
+
   async login(
     id: string,
     password: string
@@ -76,13 +101,19 @@ export class UsersService {
   }
 
   async uploadProfile(userId: number, buffer: Buffer, fileName: string) {
-    const fileUrl = await this.s3Service.uploadFileToS3(buffer, fileName);
-    const userInfo = await this.userInfoRepository.findOne({where:{user:{userId}}})
-    if(userInfo){
-      userInfo.profileUrl = fileUrl
-      await this.userInfoRepository.save(userInfo)
+    try {
+      const fileUrl = await this.s3Service.uploadFileToS3(buffer, fileName);
+      const userInfo = await this.userInfoRepository.findOne({
+        where: { user: { userId } },
+      });
+      if (userInfo) {
+        userInfo.profileUrl = fileUrl;
+        await this.userInfoRepository.save(userInfo);
+      }
+      return;
+    } catch (error) {
+      throw new InternalServerErrorException("서버 에러");
     }
-    return
   }
 
   async deleteuser(userId: number): Promise<{ message: string }> {
