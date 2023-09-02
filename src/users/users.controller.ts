@@ -48,10 +48,10 @@ export class UsersController {
     return { message: `${id}는 사용 가능한 ID입니다.` };
   }
 
-  @ApiOperation({ summary: "회원 가입 시 아이디 확인" })
+  @ApiOperation({ summary: "회원 가입 시 닉네임 확인" })
   // @ApiBody({ type: SignUpDto })
   @ApiResponse({ status: 200, description: "회원 가입 완료" })
-  @Post("/signup/idcheck")
+  @Post("/signup/nicknamecheck")
   async nicknamecheck(@Body() nickname: string) {
     await this.userService.checkNickname(nickname);
     return { message: `${nickname}는 사용 가능한 ID입니다.` };
