@@ -22,6 +22,8 @@ import { Users } from "./users.entity";
 import { DeleteUserDto } from "./dto/deleteuser.dto";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { Express } from "express";
+import { CheckIdDto } from "./dto/checkid.dto";
+import { CheckNicknameDto } from "./dto/checknickname.dto";
 
 @ApiTags("users")
 @Controller("users")
@@ -40,21 +42,21 @@ export class UsersController {
   }
 
   @ApiOperation({ summary: "회원 가입 시 아이디 확인" })
-  // @ApiBody({ type: SignUpDto })
-  @ApiResponse({ status: 200, description: "회원 가입 완료" })
+  @ApiBody({ type: CheckIdDto })
+  @ApiResponse({ status: 200, description: "아이디 확인 완료" })
   @Post("/signup/idcheck")
-  async idcheck(@Body() id: string) {
-    await this.userService.checkId(id);
-    return { message: `${id}는 사용 가능한 ID입니다.` };
+  async idcheck(@Body() checkIdDto: CheckIdDto) {
+    const check = await this.userService.checkId(checkIdDto);
+    return { message: `${check.id}는 사용 가능한 ID입니다.` };
   }
 
   @ApiOperation({ summary: "회원 가입 시 닉네임 확인" })
-  // @ApiBody({ type: SignUpDto })
-  @ApiResponse({ status: 200, description: "회원 가입 완료" })
+  @ApiBody({ type: CheckNicknameDto })
+  @ApiResponse({ status: 200, description: "닉네임 확인 완료" })
   @Post("/signup/nicknamecheck")
-  async nicknamecheck(@Body() nickname: string) {
-    await this.userService.checkNickname(nickname);
-    return { message: `${nickname}는 사용 가능한 ID입니다.` };
+  async nicknamecheck(@Body() checkNicknameDto: CheckNicknameDto) {
+    const check = await this.userService.checkNickname(checkNicknameDto);
+    return { message: `${check.nickname}는 사용 가능한 닉네임입니다.` };
   }
 
   @ApiOperation({ summary: "로그인" })
