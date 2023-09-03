@@ -13,6 +13,8 @@ import * as bcrypt from "bcrypt";
 import * as jwt from "jsonwebtoken";
 import { ConfigService } from "@nestjs/config";
 import { S3Service } from "src/aws/s3.service";
+import { CheckIdDto } from "./dto/checkid.dto";
+import { CheckNicknameDto } from "./dto/checknickname.dto";
 
 @Injectable()
 export class UsersService {
@@ -49,25 +51,27 @@ export class UsersService {
     }
   }
 
-  async checkId(id: string) {
+  async checkId(checkIdDto: CheckIdDto) {
     try {
+      const { id } = checkIdDto;
       const user = this.userRepository.findOne({ where: { id } });
       if (!user) {
         throw new ConflictException("중복된 아이디 입니다");
       }
-      return;
+      return {id};
     } catch (error) {
       throw new InternalServerErrorException("id 확인 시 서버 에러");
     }
   }
 
-  async checkNickname(nickname: string) {
+  async checkNickname(checkNicknameDto: CheckNicknameDto) {
     try {
+      const { nickname } = checkNicknameDto;
       const user = this.userInfoRepository.findOne({ where: { nickname } });
       if (!user) {
         throw new ConflictException("중복된 닉네임 입니다");
       }
-      return;
+      return {nickname};
     } catch (error) {
       throw new InternalServerErrorException("서버 에러");
     }
