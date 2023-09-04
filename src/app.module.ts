@@ -7,6 +7,7 @@ import { typeORMConfig } from "./configs/typeorm.config";
 import { UsersModule } from "./users/users.module";
 import { AuthModule } from "./auth/auth.module";
 import { AwsModule } from './aws/aws.module';
+import { MusicModule } from './music/music.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { AwsModule } from './aws/aws.module';
     UsersModule,
     AuthModule,
     AwsModule,
+    MusicModule,
   ],
   controllers: [AppController],
   providers: [AppService],
