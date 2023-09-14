@@ -6,10 +6,12 @@ import { UserInfos } from 'src/users/userInfos.entity';
 import { Users } from 'src/users/users.entity';
 import { Musics } from './music.entity';
 import { UsersService } from 'src/users/users.service';
+import { S3Service } from 'src/aws/s3.service';
+import { OpenAiService } from 'src/openai/openai.client';
 
 @Module({
   imports:[TypeOrmModule.forFeature([Users,UserInfos,Musics])],
   controllers: [MusicController],
-  providers: [MusicService, UsersService]
+  providers: [MusicService, UsersService,S3Service,OpenAiService]
 })
 export class MusicModule {}
