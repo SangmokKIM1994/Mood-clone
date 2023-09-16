@@ -8,6 +8,7 @@ import { UsersModule } from "./users/users.module";
 import { AuthModule } from "./auth/auth.module";
 import { AwsModule } from './aws/aws.module';
 import { MusicModule } from './music/music.module';
+import { CommentsModule } from './comments/comments.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { MusicModule } from './music/music.module';
     AuthModule,
     AwsModule,
     MusicModule,
+    CommentsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
