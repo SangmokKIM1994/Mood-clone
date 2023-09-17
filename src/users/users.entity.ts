@@ -4,12 +4,14 @@ import {
   Column,
   Entity,
   JoinColumn,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
 import * as bcrypt from "bcrypt";
 import * as dotenv from "dotenv";
 import { UserInfos } from "./userInfos.entity";
+import { Comments } from "src/comments/comments.entity";
 
 dotenv.config();
 
@@ -39,4 +41,7 @@ export class Users {
   @OneToOne(() => UserInfos, (userInfo) => userInfo.user, { cascade: true })
   @JoinColumn()
   userInfo: UserInfos;
+
+  @OneToMany(() => Comments, (comment) => comment.user)
+  comments: Comment[];
 }
