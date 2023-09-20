@@ -37,9 +37,9 @@ export class CommentsController {
     await this.commentService.createCommnet({ user, musicId, comment });
   }
 
-  @ApiOperation({ summary: "댓글 생성" })
+  @ApiOperation({ summary: "댓글 수정" })
   @ApiBody({ type: CreateCommentDto })
-  @ApiResponse({ status: 201, description: "댓글 생성 완료" })
+  @ApiResponse({ status: 200, description: "댓글 수정 완료" })
   @UseGuards(AuthGuard("jwt"))
   @Patch(":commentId")
   async updateComment(
@@ -52,9 +52,9 @@ export class CommentsController {
     return;
   }
 
-  @ApiOperation({ summary: "댓글 생성" })
+  @ApiOperation({ summary: "댓글 삭제" })
   @ApiBody({ type: CreateCommentDto })
-  @ApiResponse({ status: 201, description: "댓글 생성 완료" })
+  @ApiResponse({ status: 200, description: "댓글 삭제 완료" })
   @UseGuards(AuthGuard("jwt"))
   @Delete(":commentId")
   async deleteComment(
