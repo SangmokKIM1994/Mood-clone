@@ -12,6 +12,7 @@ import * as bcrypt from "bcrypt";
 import * as dotenv from "dotenv";
 import { UserInfos } from "./userInfos.entity";
 import { Comments } from "src/comments/comments.entity";
+import { Recomments } from "src/recomments/recomments.entity";
 
 dotenv.config();
 
@@ -43,5 +44,8 @@ export class Users {
   userInfo: UserInfos;
 
   @OneToMany(() => Comments, (comment) => comment.user)
-  comments: Comment[];
+  comments: Comments[];
+
+  @OneToMany(() => Recomments, (recomment) => recomment.user)
+  recomments: Recomments[];
 }
