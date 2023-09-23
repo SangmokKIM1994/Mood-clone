@@ -1,10 +1,15 @@
-import { Injectable, InternalServerErrorException } from "@nestjs/common";
+import {
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Comments } from "src/comments/comments.entity";
 import { Users } from "src/users/users.entity";
 import { Repository } from "typeorm";
 import { Recomments } from "./recomments.entity";
 import { CreateRecommentDto } from "./dto/create.recomment.dto";
+import { UpdateRecommentDto } from "./dto/update.recomment.dto";
 
 @Injectable()
 export class RecommentsService {
@@ -32,6 +37,42 @@ export class RecommentsService {
       return;
     } catch (error) {
       throw new InternalServerErrorException("대댓글 생성 시 서버 에러");
+    }
+  }
+
+  async updateRecomment(updateRecommentDto: UpdateRecommentDto) {
+    try {
+      const { recommentId, updateRecomment, user } = updateRecommentDto;
+      const recomment = await this.recommentRepository.findOne({
+        where: { recommentId },
+      });
+
+      if (user.userId !== recomment.user.userId) {
+        throw new NotFoundException("회원 정보가 일치하지 않습니다.");
+      }
+      if (updateRecomment === recomment.recomment) {
+        throw new NotFoundException("내용이 일치 합니다.");
+      }
+      recomment.recomment = updateRecomment;
+      await this.recommentRepository.save(recomment);
+      return;
+    } catch (error) {
+      throw new InternalServerErrorException("대댓글 수정 시 서버 에러");
+    }
+  }
+
+  async deleteRecomment(user: Users, recommentId: number) {
+    try {
+      const comment = await this.recommentRepository.findOne({
+        where: { recommentId },
+      });
+      if (user.userId !== comment.user.userId) {
+        throw new NotFoundException("회원 정보가 일치하지 않습니다.");
+      }
+      await this.recommentRepository.delete({ recommentId });
+      return;
+    } catch (error) {
+      throw new InternalServerErrorException("대댓글 삭제 시 서버 에러");
     }
   }
 }
