@@ -10,6 +10,8 @@ import { AwsModule } from './aws/aws.module';
 import { MusicModule } from './music/music.module';
 import { CommentsModule } from './comments/comments.module';
 import { RecommentsModule } from './recomments/recomments.module';
+import { LikesModule } from './likes/likes.module';
+import { ScrapsModule } from './scraps/scraps.module';
 
 @Module({
   imports: [
@@ -21,6 +23,8 @@ import { RecommentsModule } from './recomments/recomments.module';
     MusicModule,
     CommentsModule,
     RecommentsModule,
+    LikesModule,
+    ScrapsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
