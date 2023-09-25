@@ -15,7 +15,6 @@ import { CreateCommentDto } from "./dto/create.comments.dto";
 import { Request as ExpressRequest } from "express";
 import { Users } from "src/users/users.entity";
 import { AuthGuard } from "@nestjs/passport";
-import { string0To255 } from "aws-sdk/clients/customerprofiles";
 
 @ApiTags("comments")
 @Controller("comments")

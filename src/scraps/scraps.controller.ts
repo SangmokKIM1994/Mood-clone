@@ -1,11 +1,11 @@
 import { Controller, UseGuards, Put, Param, Req } from "@nestjs/common";
 import { AuthGuard } from "@nestjs/passport";
-import { ApiOperation, ApiResponse } from "@nestjs/swagger";
+import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { Request as ExpressRequest } from "express";
 import { ScrapsService } from "./scraps.service";
-import { User } from "aws-sdk/clients/budgets";
 import { Users } from "src/users/users.entity";
 
+@ApiTags("scraps")
 @Controller("scraps")
 export class ScrapsController {
   constructor(private readonly scrapsService: ScrapsService) {}
