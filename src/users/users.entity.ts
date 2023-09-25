@@ -13,6 +13,8 @@ import * as dotenv from "dotenv";
 import { UserInfos } from "./userInfos.entity";
 import { Comments } from "src/comments/comments.entity";
 import { Recomments } from "src/recomments/recomments.entity";
+import { Likes } from "src/likes/likes.entity";
+import { Scraps } from "src/scraps/scraps.entity";
 
 dotenv.config();
 
@@ -48,4 +50,10 @@ export class Users {
 
   @OneToMany(() => Recomments, (recomment) => recomment.user)
   recomments: Recomments[];
+
+  @OneToMany(() => Likes, (like) => like.user)
+  likes: Likes[];
+
+  @OneToMany(() => Scraps, (scrap) => scrap.user)
+  scraps: Scraps[];
 }
