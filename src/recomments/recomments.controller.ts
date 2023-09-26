@@ -36,6 +36,18 @@ export class RecommentsController {
     await this.recommentService.createRecomment({ user, commentId, recomment });
   }
 
+  @ApiOperation({ summary: "대댓글 조회" })
+  // @ApiBody({ type: CreateRecommentDto })
+  @ApiResponse({ status: 200, description: "대댓글 조회 완료" })
+  @UseGuards(AuthGuard("jwt"))
+  @Post("/")
+  async findRecommentByCommentId(@Param() commentId: number) {
+    const recomments = await this.recommentService.findRecommentByCommentId(
+      commentId
+    );
+    return recomments;
+  }
+
   @ApiOperation({ summary: "대댓글 수정" })
   // @ApiBody({ type: CreateCommentDto })
   @ApiResponse({ status: 200, description: "대댓글 수정 완료" })
