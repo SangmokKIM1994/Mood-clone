@@ -40,6 +40,17 @@ export class RecommentsService {
     }
   }
 
+  async findRecommentByCommentId(commentId: number) {
+    try {
+      const recomments = await this.recommentRepository.find({
+        where: { comment: { commentId } },
+      });
+      return recomments;
+    } catch (error) {
+      throw new InternalServerErrorException("대댓글 조회 중 서버 에러");
+    }
+  }
+
   async updateRecomment(updateRecommentDto: UpdateRecommentDto) {
     try {
       const { recommentId, updateRecomment, user } = updateRecommentDto;
