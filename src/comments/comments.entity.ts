@@ -7,7 +7,9 @@ import {
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
+  ViewColumn,
 } from "typeorm";
+import { ViewColumnOptions } from "typeorm/decorator/options/ViewColumnOptions";
 
 @Entity()
 export class Comments {
@@ -25,4 +27,7 @@ export class Comments {
 
   @OneToMany(() => Recomments, (recomment) => recomment.comment)
   recomments: Recomments[];
+
+  @ViewColumn({ select: false } as ViewColumnOptions)
+  recommentCount: number;
 }

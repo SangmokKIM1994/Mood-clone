@@ -8,6 +8,7 @@ import {
   Param,
   Patch,
   Delete,
+  Get,
 } from "@nestjs/common";
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { CommentsService } from "./comments.service";
@@ -36,11 +37,19 @@ export class CommentsController {
     await this.commentService.createCommnet({ user, musicId, comment });
   }
 
+  @ApiOperation({ summary: "댓글 조회" })
+  @ApiResponse({ status: 200, description: "댓글 조회 완료" })
+  @Get("/:musicId")
+  async findCommentByMusicId(@Param() musicId: number) {
+    const comments = await this.commentService.findByMusicId(musicId);
+    return comments;
+  }
+
   @ApiOperation({ summary: "댓글 수정" })
   @ApiBody({ type: CreateCommentDto })
   @ApiResponse({ status: 200, description: "댓글 수정 완료" })
   @UseGuards(AuthGuard("jwt"))
-  @Patch(":commentId")
+  @Patch("/:commentId")
   async updateComment(
     @Param() commentId: number,
     @Req() req: ExpressRequest & { user: Users },
@@ -55,7 +64,7 @@ export class CommentsController {
   @ApiBody({ type: CreateCommentDto })
   @ApiResponse({ status: 200, description: "댓글 삭제 완료" })
   @UseGuards(AuthGuard("jwt"))
-  @Delete(":commentId")
+  @Delete("/:commentId")
   async deleteComment(
     @Param() commentId: number,
     @Req() req: ExpressRequest & { user: Users }
