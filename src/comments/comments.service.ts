@@ -12,12 +12,13 @@ import { CreateCommentDto } from "./dto/create.comments.dto";
 import { TransformationType } from "class-transformer";
 import { UpdateCommentDto } from "./dto/update.comments.dto";
 import { NotFoundError } from "openai";
+import { Recomments } from "src/recomments/recomments.entity";
 
 @Injectable()
 export class CommentsService {
   constructor(
-    @InjectRepository(Users)
-    private readonly userRepository: Repository<Users>,
+    @InjectRepository(Recomments)
+    private readonly recommentRepository: Repository<Recomments>,
     @InjectRepository(Musics)
     private readonly musicRepository: Repository<Musics>,
     @InjectRepository(Comments)
@@ -37,6 +38,26 @@ export class CommentsService {
       return;
     } catch (error) {
       throw new InternalServerErrorException("댓글 생성 시 서버 에러");
+    }
+  }
+
+  async findByMusicId(musicId: number) {
+    try {
+      const comments = await this.commentRepository.find({
+        where: { music: { musicId } },
+      });
+
+      for (let i = 0; i <= comments.length; i++) {
+        const { commentId } = comments[i];
+        const count = await this.recommentRepository.count({
+          where: { comment: { commentId } },
+        });
+        comments[i].recommentCount = count;
+      }
+
+      return comments;
+    } catch (error) {
+      throw new InternalServerErrorException("댓글 조회 시 서버 에러");
     }
   }
 
