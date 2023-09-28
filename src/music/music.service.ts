@@ -12,6 +12,7 @@ export class MusicService {
     @InjectRepository(Musics)
     private readonly musicRepository: Repository<Musics>
   ) {}
+
   mood = async ({ userId, x, y }) => {
     let message: string;
     if (x >= 0 && x <= 25 && y >= 0 && y <= 25) {
@@ -117,4 +118,9 @@ export class MusicService {
       // return { musicData, message };
     }
   };
+
+  async findMusicByMusicId(musicId: number) {
+    const music = await this.musicRepository.findOne({ where: { musicId } });
+    return;
+  }
 }
