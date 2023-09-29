@@ -40,12 +40,25 @@ export class RecommentsService {
     }
   }
 
-  async findRecommentByCommentId(commentId: number) {
+  async findRecommentByCommentId(commentId: number, page: number) {
     try {
+      const perPage = 10;
+      const offset = (page - 1) * perPage;
       const recomments = await this.recommentRepository.find({
         where: { comment: { commentId } },
+        skip: offset,
+        take: perPage,
       });
-      return recomments;
+
+      const totalRecomments = await this.recommentRepository.count({
+        where: { comment: { commentId } },
+      });
+      const totalPages = Math.ceil(totalRecomments / perPage);
+
+      if (recomments.length === 0) {
+        throw new NotFoundException("대댓글을 찾을 수 없습니다.");
+      }
+      return { recomments, totalPages };
     } catch (error) {
       throw new InternalServerErrorException("대댓글 조회 중 서버 에러");
     }
