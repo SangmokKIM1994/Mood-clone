@@ -9,6 +9,7 @@ import {
   Patch,
   Delete,
   Get,
+  Query,
 } from "@nestjs/common";
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { CommentsService } from "./comments.service";
@@ -40,8 +41,8 @@ export class CommentsController {
   @ApiOperation({ summary: "댓글 조회" })
   @ApiResponse({ status: 200, description: "댓글 조회 완료" })
   @Get("/:musicId")
-  async findCommentByMusicId(@Param() musicId: number) {
-    const comments = await this.commentService.findByMusicId(musicId);
+  async findCommentByMusicId(@Param() musicId: number, @Query() page: number) {
+    const comments = await this.commentService.findByMusicId(musicId, page);
     return comments;
   }
 

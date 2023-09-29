@@ -41,11 +41,24 @@ export class CommentsService {
     }
   }
 
-  async findByMusicId(musicId: number) {
+  async findByMusicId(musicId: number, page: number) {
     try {
+      const perPage = 10;
+      const offset = (page - 1) * perPage;
       const comments = await this.commentRepository.find({
         where: { music: { musicId } },
+        skip: offset,
+        take: perPage,
       });
+
+      const totalComments = await this.commentRepository.count({
+        where: { music: { musicId } },
+      });
+      const totalPages = Math.ceil(totalComments / perPage);
+
+      if (comments.length === 0) {
+        throw new NotFoundException("댓글을 찾을 수 없습니다.");
+      }
 
       for (let i = 0; i <= comments.length; i++) {
         const { commentId } = comments[i];
@@ -55,7 +68,7 @@ export class CommentsService {
         comments[i].recommentCount = count;
       }
 
-      return comments;
+      return { comments, totalPages, page };
     } catch (error) {
       throw new InternalServerErrorException("댓글 조회 시 서버 에러");
     }
