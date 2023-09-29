@@ -8,6 +8,7 @@ import {
   ValidationPipe,
   Patch,
   Delete,
+  Query,
 } from "@nestjs/common";
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { RecommentsService } from "./recomments.service";
@@ -41,9 +42,13 @@ export class RecommentsController {
   @ApiResponse({ status: 200, description: "대댓글 조회 완료" })
   @UseGuards(AuthGuard("jwt"))
   @Post("/")
-  async findRecommentByCommentId(@Param() commentId: number) {
+  async findRecommentByCommentId(
+    @Param() commentId: number,
+    @Query() page: number
+  ) {
     const recomments = await this.recommentService.findRecommentByCommentId(
-      commentId
+      commentId,
+      page
     );
     return recomments;
   }
