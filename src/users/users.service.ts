@@ -15,6 +15,8 @@ import { ConfigService } from "@nestjs/config";
 import { S3Service } from "src/aws/s3.service";
 import { CheckIdDto } from "./dto/checkid.dto";
 import { CheckNicknameDto } from "./dto/checknickname.dto";
+import { Likes } from "src/likes/likes.entity";
+import { Scraps } from "src/scraps/scraps.entity";
 
 @Injectable()
 export class UsersService {
@@ -24,7 +26,11 @@ export class UsersService {
     @InjectRepository(UserInfos)
     private readonly userInfoRepository: Repository<UserInfos>,
     private readonly configService: ConfigService,
-    private readonly s3Service: S3Service
+    private readonly s3Service: S3Service,
+    @InjectRepository(Likes)
+    private readonly likeRepository: Repository<Likes>,
+    @InjectRepository(Scraps)
+    private readonly scrapRepository: Repository<Scraps>
   ) {}
 
   async signup(signUpDto: SignUpDto): Promise<{ nickname: string }> {
@@ -58,7 +64,7 @@ export class UsersService {
       if (!user) {
         throw new ConflictException("중복된 아이디 입니다");
       }
-      return {id};
+      return { id };
     } catch (error) {
       throw new InternalServerErrorException("id 확인 시 서버 에러");
     }
@@ -71,7 +77,7 @@ export class UsersService {
       if (!user) {
         throw new ConflictException("중복된 닉네임 입니다");
       }
-      return {nickname};
+      return { nickname };
     } catch (error) {
       throw new InternalServerErrorException("서버 에러");
     }
@@ -131,5 +137,25 @@ export class UsersService {
     } catch (error) {
       throw new NotFoundException("회원 정보가 일치하지 않습니다.");
     }
+  }
+
+  async findLikeMusic(userId: number) {
+    const music = await this.likeRepository
+      .createQueryBuilder("likes")
+      .select("likes.music", "music")
+      .where("likes.user = :userId", { userId })
+      .getMany();
+
+    return music.map((item) => item.music);
+  }
+
+  async findScrapMusic(userId: number) {
+    const music = await this.scrapRepository
+      .createQueryBuilder("scraps")
+      .select("scraps.music", "music")
+      .where("scraps.user = :userId", { userId })
+      .getMany();
+
+    return music.map((item) => item.music);
   }
 }
