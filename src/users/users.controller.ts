@@ -96,4 +96,24 @@ export class UsersController {
     const user = req.user;
     return await this.userService.deleteuser(user.userId);
   }
+
+  @ApiOperation({ summary: "좋아요 한 음악 조회" })
+  @ApiResponse({ status: 200, description: "좋아요 한 음악 조회 성공" })
+  @Get("/likemusic")
+  @UseGuards(AuthGuard("jwt"))
+  async findLikeMusic(@Req() req: ExpressRequest & { user: Users }) {
+    const user = req.user;
+    const music = await this.userService.findLikeMusic(user.userId);
+    return music;
+  }
+
+  @ApiOperation({ summary: "좋아요 한 음악 조회" })
+  @ApiResponse({ status: 200, description: "좋아요 한 음악 조회 성공" })
+  @Get("/scrapmusic")
+  @UseGuards(AuthGuard("jwt"))
+  async findScrapMusic(@Req() req: ExpressRequest & { user: Users }) {
+    const user = req.user;
+    const music = await this.userService.findScrapMusic(user.userId);
+    return music;
+  }
 }
