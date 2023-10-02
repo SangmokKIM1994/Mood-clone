@@ -99,7 +99,7 @@ export class UsersController {
 
   @ApiOperation({ summary: "좋아요 한 음악 조회" })
   @ApiResponse({ status: 200, description: "좋아요 한 음악 조회 성공" })
-  @Get("/likemusic")
+  @Get("/likelist")
   @UseGuards(AuthGuard("jwt"))
   async findLikeMusic(@Req() req: ExpressRequest & { user: Users }) {
     const user = req.user;
@@ -107,13 +107,23 @@ export class UsersController {
     return music;
   }
 
-  @ApiOperation({ summary: "좋아요 한 음악 조회" })
-  @ApiResponse({ status: 200, description: "좋아요 한 음악 조회 성공" })
-  @Get("/scrapmusic")
+  @ApiOperation({ summary: "스크랩 한 음악 조회" })
+  @ApiResponse({ status: 200, description: "스크랩 한 음악 조회 성공" })
+  @Get("/scraplist")
   @UseGuards(AuthGuard("jwt"))
   async findScrapMusic(@Req() req: ExpressRequest & { user: Users }) {
     const user = req.user;
     const music = await this.userService.findScrapMusic(user.userId);
     return music;
+  }
+
+  @ApiOperation({ summary: "본인이 쓴 댓글 조회" })
+  @ApiResponse({ status: 200, description: "나의 댓글 조회 성공" })
+  @Get("/commentlist")
+  @UseGuards(AuthGuard("jwt"))
+  async findMyComments(@Req() req: ExpressRequest & { user: Users }) {
+    const user = req.user;
+    const result = await this.userService.findMyComments(user.userId);
+    return result;
   }
 }
