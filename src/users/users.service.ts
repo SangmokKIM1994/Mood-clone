@@ -17,6 +17,7 @@ import { CheckIdDto } from "./dto/checkid.dto";
 import { CheckNicknameDto } from "./dto/checknickname.dto";
 import { Likes } from "src/likes/likes.entity";
 import { Scraps } from "src/scraps/scraps.entity";
+import { Comments } from "src/comments/comments.entity";
 
 @Injectable()
 export class UsersService {
@@ -30,7 +31,9 @@ export class UsersService {
     @InjectRepository(Likes)
     private readonly likeRepository: Repository<Likes>,
     @InjectRepository(Scraps)
-    private readonly scrapRepository: Repository<Scraps>
+    private readonly scrapRepository: Repository<Scraps>,
+    @InjectRepository(Comments)
+    private readonly commentRepository: Repository<Comments>
   ) {}
 
   async signup(signUpDto: SignUpDto): Promise<{ nickname: string }> {
@@ -157,5 +160,16 @@ export class UsersService {
       .getMany();
 
     return music.map((item) => item.music);
+  }
+
+  async findMyComments(userId: number) {
+    const comments = await this.commentRepository.find({
+      where: { user: { userId } },
+    });
+    const userInfo = await this.userInfoRepository.findOne({
+      where: { user: { userId } },
+    });
+
+    return { nickname: userInfo.nickname, comments };
   }
 }
