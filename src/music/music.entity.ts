@@ -1,6 +1,7 @@
 import { Comments } from "src/comments/comments.entity";
 import { Likes } from "src/likes/likes.entity";
 import { Scraps } from "src/scraps/scraps.entity";
+import { Streamings } from "src/streamings/streamings.entity";
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
@@ -25,4 +26,7 @@ export class Musics {
 
   @OneToMany(() => Scraps, (scrap) => scrap.music)
   scraps: Scraps[];
+
+  @OneToMany(() => Streamings, (streaming) => streaming.music)
+  streaming: Streamings[];
 }
