@@ -15,6 +15,7 @@ import { Comments } from "src/comments/comments.entity";
 import { Recomments } from "src/recomments/recomments.entity";
 import { Likes } from "src/likes/likes.entity";
 import { Scraps } from "src/scraps/scraps.entity";
+import { Streamings } from "src/streamings/streamings.entity";
 
 dotenv.config();
 
@@ -56,4 +57,7 @@ export class Users {
 
   @OneToMany(() => Scraps, (scrap) => scrap.user)
   scraps: Scraps[];
+
+  @OneToMany(() => Streamings, (streaming) => streaming.user)
+  streaming: Streamings[];
 }
