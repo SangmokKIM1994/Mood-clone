@@ -7,9 +7,9 @@ export class Streamings {
   @PrimaryGeneratedColumn()
   streamingId: number;
 
-  @ManyToOne(() => Users, (user) => user.streamings)
+  @ManyToOne(() => Users, (user) => user.streaming)
   user: Users;
 
-  @ManyToOne(() => Musics, (music) => music.streamings)
+  @ManyToOne(() => Musics, (music) => music.streaming)
   music: Musics;
 }
