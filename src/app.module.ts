@@ -12,6 +12,7 @@ import { CommentsModule } from './comments/comments.module';
 import { RecommentsModule } from './recomments/recomments.module';
 import { LikesModule } from './likes/likes.module';
 import { ScrapsModule } from './scraps/scraps.module';
+import { StreamingsModule } from './streamings/streamings.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { ScrapsModule } from './scraps/scraps.module';
     RecommentsModule,
     LikesModule,
     ScrapsModule,
+    StreamingsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
