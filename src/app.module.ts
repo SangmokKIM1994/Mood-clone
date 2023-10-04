@@ -6,13 +6,12 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { typeORMConfig } from "./configs/typeorm.config";
 import { UsersModule } from "./users/users.module";
 import { AuthModule } from "./auth/auth.module";
-import { AwsModule } from './aws/aws.module';
-import { MusicModule } from './music/music.module';
-import { CommentsModule } from './comments/comments.module';
-import { RecommentsModule } from './recomments/recomments.module';
-import { LikesModule } from './likes/likes.module';
-import { ScrapsModule } from './scraps/scraps.module';
-import { StreamingsModule } from './streamings/streamings.module';
+import { AwsModule } from "./aws/aws.module";
+import { MusicModule } from "./music/music.module";
+import { CommentsModule } from "./comments/comments.module";
+import { RecommentsModule } from "./recomments/recomments.module";
+import { LikesModule } from "./likes/likes.module";
+import { ScrapsModule } from "./scraps/scraps.module";
 
 @Module({
   imports: [
@@ -26,7 +25,6 @@ import { StreamingsModule } from './streamings/streamings.module';
     RecommentsModule,
     LikesModule,
     ScrapsModule,
-    StreamingsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
