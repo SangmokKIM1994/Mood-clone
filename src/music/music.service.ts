@@ -3,6 +3,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Users } from "src/users/users.entity";
 import { Repository } from "typeorm";
 import { Musics } from "./music.entity";
+import { Streamings } from "src/streamings/streamings.entity";
 
 @Injectable()
 export class MusicService {
@@ -10,7 +11,9 @@ export class MusicService {
     @InjectRepository(Users)
     private readonly userRepository: Repository<Users>,
     @InjectRepository(Musics)
-    private readonly musicRepository: Repository<Musics>
+    private readonly musicRepository: Repository<Musics>,
+    @InjectRepository(Streamings)
+    private readonly streamingRepository: Repository<Streamings>
   ) {}
 
   mood = async ({ userId, x, y }) => {
@@ -119,8 +122,10 @@ export class MusicService {
     }
   };
 
-  async findMusicByMusicId(musicId: number) {
+  async findMusicByMusicId(musicId: number, user: Users) {
     const music = await this.musicRepository.findOne({ where: { musicId } });
+    const streaming = this.streamingRepository.create({ user, music });
+    await this.streamingRepository.save(streaming);
     return;
   }
 }
