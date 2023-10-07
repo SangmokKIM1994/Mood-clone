@@ -43,7 +43,6 @@ export class Users {
   }
 
   @OneToOne(() => UserInfos, (userInfo) => userInfo.user, { cascade: true })
-  @JoinColumn()
   userInfo: UserInfos;
 
   @OneToMany(() => Comments, (comment) => comment.user)

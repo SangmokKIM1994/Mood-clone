@@ -25,6 +25,9 @@ export class UserInfos {
   myStatus: string;
 
   @OneToOne(() => Users, (user) => user.userInfo)
-  @JoinColumn()
+  @JoinColumn({ name: "userId" })
   user: Users;
+
+  @Column()
+  userId: number;
 }
