@@ -4,6 +4,7 @@ import { Users } from "src/users/users.entity";
 import {
   Column,
   Entity,
+  JoinColumn,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -19,11 +20,19 @@ export class Comments {
   @Column()
   comment: string;
 
+  @ManyToOne(() => Users, (user) => user.comments)
+  @JoinColumn({ name: "userId" })
+  user: Users;
+
+  @Column()
+  userId: number;
+
   @ManyToOne(() => Musics, (music) => music.comments)
+  @JoinColumn({ name: "musicId" })
   music: Musics;
 
-  @ManyToOne(() => Users, (user) => user.comments)
-  user: Users;
+  @Column()
+  musicId: number;
 
   @OneToMany(() => Recomments, (recomment) => recomment.comment)
   recomments: Recomments[];
