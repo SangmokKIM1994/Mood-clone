@@ -12,11 +12,16 @@ import { CommentsModule } from "./comments/comments.module";
 import { RecommentsModule } from "./recomments/recomments.module";
 import { LikesModule } from "./likes/likes.module";
 import { ScrapsModule } from "./scraps/scraps.module";
+import { elasticsearchConfig } from "./configs/elasticsearch.config";
+import { ElasticsearchModule } from "@nestjs/elasticsearch";
 
 @Module({
   imports: [
     ConfigModule.forRoot({ envFilePath: ".env", isGlobal: true }),
     TypeOrmModule.forRoot(typeORMConfig),
+    ElasticsearchModule.registerAsync({
+      useFactory: () => elasticsearchConfig,
+    }),
     UsersModule,
     AuthModule,
     AwsModule,
