@@ -4,6 +4,7 @@ import { Users } from "src/users/users.entity";
 import { Repository } from "typeorm";
 import { Musics } from "./music.entity";
 import { Streamings } from "src/streamings/streamings.entity";
+import { ElasticsearchService } from "@nestjs/elasticsearch";
 
 @Injectable()
 export class MusicService {
@@ -13,7 +14,8 @@ export class MusicService {
     @InjectRepository(Musics)
     private readonly musicRepository: Repository<Musics>,
     @InjectRepository(Streamings)
-    private readonly streamingRepository: Repository<Streamings>
+    private readonly streamingRepository: Repository<Streamings>,
+    private readonly elasticsearchService: ElasticsearchService
   ) {}
 
   mood = async ({ userId, x, y }) => {
@@ -127,5 +129,18 @@ export class MusicService {
     const streaming = this.streamingRepository.create({ user, music });
     await this.streamingRepository.save(streaming);
     return;
+  }
+
+  async searchMusic(keyword: string) {
+    const result = await this.elasticsearchService.search({
+      index: "music", // 검색할 인덱스 이름
+      body: {
+        query: {
+          match: { title: keyword }, // 'title' 필드에서 query와 일치하는 문서 찾기
+        },
+      },
+    });
+
+    return result;
   }
 }
