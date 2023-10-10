@@ -133,10 +133,10 @@ export class MusicService {
 
   async searchMusic(keyword: string) {
     const result = await this.elasticsearchService.search({
-      index: "music", // 검색할 인덱스 이름
+      index: "music",
       body: {
         query: {
-          match: { title: keyword }, // 'title' 필드에서 query와 일치하는 문서 찾기
+          match: { title: keyword },
         },
       },
     });
