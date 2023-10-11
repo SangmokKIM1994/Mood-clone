@@ -5,6 +5,10 @@ import { Repository } from "typeorm";
 import { Musics } from "./music.entity";
 import { Streamings } from "src/streamings/streamings.entity";
 import { ElasticsearchService } from "@nestjs/elasticsearch";
+import { Likes } from "src/likes/likes.entity";
+import { Scraps } from "src/scraps/scraps.entity";
+import { Comments } from "src/comments/comments.entity";
+import { Recomments } from "src/recomments/recomments.entity";
 
 @Injectable()
 export class MusicService {
@@ -15,6 +19,14 @@ export class MusicService {
     private readonly musicRepository: Repository<Musics>,
     @InjectRepository(Streamings)
     private readonly streamingRepository: Repository<Streamings>,
+    @InjectRepository(Likes)
+    private readonly likeRepository: Repository<Likes>,
+    @InjectRepository(Scraps)
+    private readonly scrapRepository: Repository<Scraps>,
+    @InjectRepository(Comments)
+    private readonly commentsRepository: Repository<Comments>,
+    @InjectRepository(Recomments)
+    private readonly recommentsRepository: Repository<Recomments>,
     private readonly elasticsearchService: ElasticsearchService
   ) {}
 
@@ -142,5 +154,12 @@ export class MusicService {
     });
 
     return result;
+  }
+
+  async suggestMusic() {
+    const allMusics = await this.musicRepository.find();
+    for (let i = 0; i < allMusics.length; i++) {
+      // allMusics[0].likeCount = await this
+    }
   }
 }
