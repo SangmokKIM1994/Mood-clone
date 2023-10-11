@@ -2,7 +2,14 @@ import { Comments } from "src/comments/comments.entity";
 import { Likes } from "src/likes/likes.entity";
 import { Scraps } from "src/scraps/scraps.entity";
 import { Streamings } from "src/streamings/streamings.entity";
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import {
+  Column,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  ViewColumn,
+} from "typeorm";
+import { ViewColumnOptions } from "typeorm/decorator/options/ViewColumnOptions";
 
 @Entity()
 export class Musics {
@@ -29,4 +36,19 @@ export class Musics {
 
   @OneToMany(() => Streamings, (streaming) => streaming.music)
   streaming: Streamings[];
+
+  @ViewColumn({ select: false } as ViewColumnOptions)
+  streamingCount: number;
+
+  @ViewColumn({ select: false } as ViewColumnOptions)
+  likeCount: number;
+
+  @ViewColumn({ select: false } as ViewColumnOptions)
+  scrapCount: number;
+
+  @ViewColumn({ select: false } as ViewColumnOptions)
+  commentCount: number;
+
+  @ViewColumn({ select: false } as ViewColumnOptions)
+  totalScore: number;
 }
