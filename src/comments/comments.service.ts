@@ -45,30 +45,26 @@ export class CommentsService {
     try {
       const perPage = 10;
       const offset = (page - 1) * perPage;
-      const comments = await this.commentRepository.find({
-        where: { music: { musicId } },
-        skip: offset,
-        take: perPage,
-      });
 
-      const totalComments = await this.commentRepository.count({
-        where: { music: { musicId } },
-      });
-      const totalPages = Math.ceil(totalComments / perPage);
+      const commentsQuery = this.commentRepository
+        .createQueryBuilder("comment")
+        .leftJoin("comment.recomments", "recomment")
+        .select([
+          "comment.commentId",
+          "comment.comment",
+          "COUNT(recomment.commentId) AS recommentCount",
+        ])
+        .where("comment.musicId = :musicId", { musicId })
+        .groupBy("comment.id")
+        .skip(offset)
+        .take(perPage);
 
-      if (comments.length === 0) {
-        throw new NotFoundException("댓글을 찾을 수 없습니다.");
-      }
+      const comments = await commentsQuery.getRawMany();
 
-      for (let i = 0; i <= comments.length; i++) {
-        const { commentId } = comments[i];
-        const count = await this.recommentRepository.count({
-          where: { comment: { commentId } },
-        });
-        comments[i].recommentCount = count;
-      }
+      const totalCommentsQuery = commentsQuery.groupBy(undefined);
+      const totalCommentsResult = await totalCommentsQuery.getCount();
 
-      return { comments, totalPages, page };
+      return { comments, total: totalCommentsResult };
     } catch (error) {
       throw new InternalServerErrorException("댓글 조회 시 서버 에러");
     }
