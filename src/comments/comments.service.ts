@@ -9,16 +9,11 @@ import { Users } from "src/users/users.entity";
 import { Repository } from "typeorm";
 import { Comments } from "./comments.entity";
 import { CreateCommentDto } from "./dto/create.comments.dto";
-import { TransformationType } from "class-transformer";
 import { UpdateCommentDto } from "./dto/update.comments.dto";
-import { NotFoundError } from "openai";
-import { Recomments } from "src/recomments/recomments.entity";
 
 @Injectable()
 export class CommentsService {
   constructor(
-    @InjectRepository(Recomments)
-    private readonly recommentRepository: Repository<Recomments>,
     @InjectRepository(Musics)
     private readonly musicRepository: Repository<Musics>,
     @InjectRepository(Comments)
