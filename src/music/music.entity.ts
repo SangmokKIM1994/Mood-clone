@@ -5,11 +5,13 @@ import { Streamings } from "src/streamings/streamings.entity";
 import {
   Column,
   Entity,
+  ManyToMany,
   OneToMany,
   PrimaryGeneratedColumn,
   ViewColumn,
 } from "typeorm";
 import { ViewColumnOptions } from "typeorm/decorator/options/ViewColumnOptions";
+import { Status } from "./status.entity";
 
 @Entity()
 export class Musics {
@@ -36,6 +38,9 @@ export class Musics {
 
   @OneToMany(() => Streamings, (streaming) => streaming.music)
   streaming: Streamings[];
+
+  @ManyToMany(() => Status, (status) => status.music)
+  status: Status[];
 
   @ViewColumn({ select: false } as ViewColumnOptions)
   streamingCount: number;
