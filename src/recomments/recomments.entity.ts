@@ -1,9 +1,11 @@
 import { Comments } from "src/comments/comments.entity";
+import { Status } from "src/music/status.entity";
 import { Users } from "src/users/users.entity";
 import {
   Column,
   Entity,
   JoinColumn,
+  ManyToMany,
   ManyToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
@@ -29,4 +31,7 @@ export class Recomments {
 
   @Column()
   commentId: number;
+
+  @ManyToMany(() => Status, (status) => status.recomment)
+  status: Status[];
 }
