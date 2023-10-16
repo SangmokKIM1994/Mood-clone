@@ -2,6 +2,7 @@ import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Musics } from "./music.entity";
 import { Scraps } from "src/scraps/scraps.entity";
 import { Likes } from "src/likes/likes.entity";
+import { Comments } from "src/comments/comments.entity";
 
 @Entity()
 export class Status {
@@ -19,4 +20,7 @@ export class Status {
 
   @ManyToMany(() => Likes, (like) => like.status)
   like: Likes[];
+
+  @ManyToMany(() => Comments, (comment) => comment.status)
+  comment: Comments[];
 }
