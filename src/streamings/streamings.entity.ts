@@ -1,9 +1,11 @@
 import { Musics } from "src/music/music.entity";
+import { Status } from "src/music/status.entity";
 import { Users } from "src/users/users.entity";
 import {
   Column,
   Entity,
   JoinColumn,
+  ManyToMany,
   ManyToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
@@ -26,4 +28,7 @@ export class Streamings {
 
   @Column()
   musicId: number;
+
+  @ManyToMany(() => Status, (status) => status.streaming)
+  status: Status[];
 }

@@ -1,10 +1,12 @@
 import { Musics } from "src/music/music.entity";
+import { Status } from "src/music/status.entity";
 import { Recomments } from "src/recomments/recomments.entity";
 import { Users } from "src/users/users.entity";
 import {
   Column,
   Entity,
   JoinColumn,
+  ManyToMany,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -39,4 +41,7 @@ export class Comments {
 
   @ViewColumn({ select: false } as ViewColumnOptions)
   recommentCount: number;
+
+  @ManyToMany(() => Status, (status) => status.comment)
+  status: Status[];
 }
