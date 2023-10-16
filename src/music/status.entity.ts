@@ -3,6 +3,8 @@ import { Musics } from "./music.entity";
 import { Scraps } from "src/scraps/scraps.entity";
 import { Likes } from "src/likes/likes.entity";
 import { Comments } from "src/comments/comments.entity";
+import { Streamings } from "src/streamings/streamings.entity";
+
 
 @Entity()
 export class Status {
@@ -21,6 +23,10 @@ export class Status {
   @ManyToMany(() => Likes, (like) => like.status)
   like: Likes[];
 
+
   @ManyToMany(() => Comments, (comment) => comment.status)
   comment: Comments[];
+
+  @ManyToMany(() => Streamings, (streaming) => streaming.status)
+  streaming: Streamings[];
 }
