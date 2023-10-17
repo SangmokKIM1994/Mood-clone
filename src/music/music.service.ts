@@ -9,6 +9,7 @@ import { Likes } from "src/likes/likes.entity";
 import { Scraps } from "src/scraps/scraps.entity";
 import { Comments } from "src/comments/comments.entity";
 import { Recomments } from "src/recomments/recomments.entity";
+import { Status } from "./status.entity";
 
 @Injectable()
 export class MusicService {
@@ -27,6 +28,8 @@ export class MusicService {
     private readonly commentsRepository: Repository<Comments>,
     @InjectRepository(Recomments)
     private readonly recommentsRepository: Repository<Recomments>,
+    @InjectRepository(Status)
+    private readonly statusRepository: Repository<Status>,
     private readonly elasticsearchService: ElasticsearchService
   ) {}
 
@@ -156,10 +159,24 @@ export class MusicService {
     return result;
   }
 
-  async suggestMusic() {
+  async suggestMusic(userId: number) {
+    const user = await this.userRepository.findOne({
+      where: { userId },
+      relations: ["userInfos"],
+    });
+    const myStatus = user.userInfo.myStatus;
+    const findStatus = await this.statusRepository.findOne({
+      where: { status: myStatus },
+    });
     const allMusics = await this.musicRepository.find();
     for (let i = 0; i < allMusics.length; i++) {
       // allMusics[0].likeCount = await this
     }
+
+    const scrapCount = await this.statusRepository
+      .createQueryBuilder("status")
+      .leftJoinAndSelect("status.scrap", "scrap")
+      .where("status.id = :id", { id: findStatus.statusId })
+      .getCount();
   }
 }
