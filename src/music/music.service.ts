@@ -178,5 +178,11 @@ export class MusicService {
       .leftJoinAndSelect("status.scrap", "scrap")
       .where("status.id = :id", { id: findStatus.statusId })
       .getCount();
+
+    const likeCount = await this.statusRepository
+      .createQueryBuilder("status")
+      .leftJoinAndSelect("status.like", "like")
+      .where("status.id = :id", { id: findStatus.statusId })
+      .getCount();
   }
 }
