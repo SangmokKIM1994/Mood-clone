@@ -168,10 +168,6 @@ export class MusicService {
     const findStatus = await this.statusRepository.findOne({
       where: { status: myStatus },
     });
-    const allMusics = await this.musicRepository.find();
-    for (let i = 0; i < allMusics.length; i++) {
-      // allMusics[0].likeCount = await this
-    }
 
     const scrapCount = await this.statusRepository
       .createQueryBuilder("status")
