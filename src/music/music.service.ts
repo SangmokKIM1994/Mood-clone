@@ -175,11 +175,20 @@ export class MusicService {
       .where("status.id = :id", { id: findStatus.statusId })
       .getCount();
 
-    const likeCount = await this.statusRepository
-      .createQueryBuilder("status")
-      .leftJoinAndSelect("status.like", "like")
-      .where("status.id = :id", { id: findStatus.statusId })
-      .getCount();
+    const topLikeMusic = await this.likeRepository
+      .createQueryBuilder("like")
+      .innerJoin("like.music", "music")
+      .innerJoin("like.status", "status")
+      .select([
+        "music.id as musicId",
+        "music.title as title",
+        "COUNT(like.id) as likeCount",
+      ])
+      .where("status.mood = :mood", { myStatus })
+      .groupBy("music.id")
+      .orderBy("likeCount", "DESC")
+      .limit(5)
+      .getRawMany();
 
     const topStreamingMusic = await this.streamingRepository
       .createQueryBuilder("streaming")
