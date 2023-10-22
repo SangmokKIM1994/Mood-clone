@@ -174,11 +174,11 @@ export class MusicService {
       .innerJoin("like.music", "music")
       .innerJoin("like.status", "status")
       .select([
-        "music.id as musicId",
+        "music.musicId as musicId",
         "music.title as title",
         "COUNT(like.id) as likeCount",
       ])
-      .where("status.mood = :mood", { myStatus })
+      .where("status.status = :status", { status: findStatus })
       .groupBy("music.id")
       .orderBy("likeCount", "DESC")
       .limit(5)
@@ -193,7 +193,7 @@ export class MusicService {
         "music.title as title",
         "COUNT(streaming.id) as playCount",
       ])
-      .where("status.mood = :mood", { mood })
+      .where("status.status = :status", { status: myStatus })
       .groupBy("music.id")
       .orderBy("playCount", "DESC")
       .limit(5)
