@@ -169,6 +169,10 @@ export class MusicService {
       where: { status: myStatus },
     });
 
+    const findRecentLike = await this.likeRepository.findOne({
+      where: { userId },
+    });
+
     const topLikeMusic = await this.likeRepository
       .createQueryBuilder("like")
       .innerJoin("like.music", "music")
@@ -178,11 +182,17 @@ export class MusicService {
         "music.title as title",
         "COUNT(like.id) as likeCount",
       ])
-      .where("status.status = :status", { status: findStatus })
+      .where("status.statusId = :statusId", {
+        statusId: findRecentLike.status.statusId,
+      })
       .groupBy("music.id")
       .orderBy("likeCount", "DESC")
       .limit(5)
       .getRawMany();
+
+    const findRecentStreaming = await this.streamingRepository.findOne({
+      where: { userId },
+    });
 
     const topStreamingMusic = await this.streamingRepository
       .createQueryBuilder("streaming")
@@ -193,7 +203,9 @@ export class MusicService {
         "music.title as title",
         "COUNT(streaming.id) as playCount",
       ])
-      .where("status.status = :status", { status: myStatus })
+      .where("status.statusId = :statusId", {
+        statusId: findRecentStreaming.status,
+      })
       .groupBy("music.id")
       .orderBy("playCount", "DESC")
       .limit(5)
