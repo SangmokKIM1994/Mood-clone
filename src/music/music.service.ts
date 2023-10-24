@@ -25,7 +25,7 @@ export class MusicService {
     @InjectRepository(Scraps)
     private readonly scrapRepository: Repository<Scraps>,
     @InjectRepository(Comments)
-    private readonly commentsRepository: Repository<Comments>,
+    private readonly commentRepository: Repository<Comments>,
     @InjectRepository(Recomments)
     private readonly recommentsRepository: Repository<Recomments>,
     @InjectRepository(Status)
@@ -208,6 +208,28 @@ export class MusicService {
       })
       .groupBy("music.id")
       .orderBy("playCount", "DESC")
+      .limit(5)
+      .getRawMany();
+
+    const findRecentComment = await this.commentRepository.findOne({
+      where: { userId },
+      order: { commentId: "DESC" }, // 가장 최근에 작성된 댓글을 찾습니다.
+    });
+
+    const topCommentMusic = await this.commentRepository
+      .createQueryBuilder("comment")
+      .innerJoin("comment.music", "music")
+      .innerJoin("comment.status", "status")
+      .select([
+        "music.musicId as musicId",
+        "music.title as title",
+        "COUNT(comment.id) as commentCount",
+      ])
+      .where("status.statusId = :statusId", {
+        statusId: findRecentComment.status,
+      })
+      .groupBy("music.id")
+      .orderBy("commentCount", "DESC")
       .limit(5)
       .getRawMany();
   }
