@@ -160,17 +160,9 @@ export class MusicService {
   }
 
   async suggestMusic(userId: number) {
-    const user = await this.userRepository.findOne({
-      where: { userId },
-      relations: ["userInfos"],
-    });
-    const myStatus = user.userInfo.myStatus;
-    const findStatus = await this.statusRepository.findOne({
-      where: { status: myStatus },
-    });
-
     const findRecentLike = await this.likeRepository.findOne({
       where: { userId },
+      order: { likeId: "DESC" },
     });
 
     const topLikeMusic = await this.likeRepository
@@ -192,6 +184,7 @@ export class MusicService {
 
     const findRecentStreaming = await this.streamingRepository.findOne({
       where: { userId },
+      order: { streamingId: "DESC" },
     });
 
     const topStreamingMusic = await this.streamingRepository
@@ -213,7 +206,7 @@ export class MusicService {
 
     const findRecentComment = await this.commentRepository.findOne({
       where: { userId },
-      order: { commentId: "DESC" }, // 가장 최근에 작성된 댓글을 찾습니다.
+      order: { commentId: "DESC" },
     });
 
     const topCommentMusic = await this.commentRepository
@@ -232,5 +225,31 @@ export class MusicService {
       .orderBy("commentCount", "DESC")
       .limit(5)
       .getRawMany();
+
+    const findRecentScrap = await this.scrapRepository.findOne({
+      where: { userId },
+      order: { scrapId: "DESC" },
+    });
+
+    const scrapMusic = await this.musicRepository.findOne({
+      where: { musicId: findRecentScrap.musicId },
+      relations: ["composer"],
+    });
+
+    // 해당 작곡가의 다른 음악 찾기
+    const composerMusic = await this.musicRepository
+      .createQueryBuilder("music")
+      .innerJoin("music.composer", "composer")
+      .select([
+        "music.musicId as musicId",
+        "music.title as title",
+        "composer.name as composerName",
+      ])
+      .where("composer.composerId = :composerId", {
+        composer: scrapMusic.composer,
+      })
+      .orderBy("music.musicId", "DESC")
+      .limit(5)
+      .getMany();
   }
 }
