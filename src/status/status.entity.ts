@@ -1,11 +1,10 @@
 import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
-import { Musics } from "./music.entity";
+import { Musics } from "../music/music.entity";
 import { Scraps } from "src/scraps/scraps.entity";
 import { Likes } from "src/likes/likes.entity";
 import { Recomments } from "src/recomments/recomments.entity";
 import { Comments } from "src/comments/comments.entity";
 import { Streamings } from "src/streamings/streamings.entity";
-
 
 @Entity()
 export class Status {

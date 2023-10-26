@@ -1,5 +1,5 @@
 import { Comments } from "src/comments/comments.entity";
-import { Status } from "src/music/status.entity";
+import { Status } from "src/status/status.entity";
 import { Users } from "src/users/users.entity";
 import {
   Column,

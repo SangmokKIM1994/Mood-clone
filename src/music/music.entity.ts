@@ -6,12 +6,14 @@ import {
   Column,
   Entity,
   ManyToMany,
+  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
   ViewColumn,
 } from "typeorm";
 import { ViewColumnOptions } from "typeorm/decorator/options/ViewColumnOptions";
-import { Status } from "./status.entity";
+import { Status } from "../status/status.entity";
+import { Composers } from "src/composer/composer.entity";
 
 @Entity()
 export class Musics {
@@ -41,6 +43,9 @@ export class Musics {
 
   @ManyToMany(() => Status, (status) => status.music)
   status: Status[];
+
+  @ManyToOne(() => Composers, (composer) => composer.music)
+  composer: Composers;
 
   @ViewColumn({ select: false } as ViewColumnOptions)
   streamingCount: number;

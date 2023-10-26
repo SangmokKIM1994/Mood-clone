@@ -1,5 +1,5 @@
 import { Musics } from "src/music/music.entity";
-import { Status } from "src/music/status.entity";
+import { Status } from "src/status/status.entity";
 import { Users } from "src/users/users.entity";
 import {
   Column,
@@ -29,6 +29,6 @@ export class Scraps {
   @Column()
   musicId: number;
 
-  @ManyToMany(()=> Status,(status)=>status.scrap)
-  status: Status[]
+  @ManyToMany(() => Status, (status) => status.scrap)
+  status: Status[];
 }
