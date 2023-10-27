@@ -245,7 +245,7 @@ export class MusicService {
         "composer.name as composerName",
       ])
       .where("composer.composerId = :composerId", {
-        composer: scrapMusic.composer,
+        composerdId: scrapMusic.composerId,
       })
       .orderBy("music.musicId", "DESC")
       .limit(5)
