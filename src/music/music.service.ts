@@ -236,7 +236,7 @@ export class MusicService {
       relations: ["composer"],
     });
 
-    const composerMusic = await this.musicRepository
+    const scrapComposerMusic = await this.musicRepository
       .createQueryBuilder("music")
       .innerJoin("music.composer", "composer")
       .select([
@@ -250,5 +250,12 @@ export class MusicService {
       .orderBy("music.musicId", "DESC")
       .limit(5)
       .getMany();
+
+    return {
+      topLikeMusic,
+      topStreamingMusic,
+      topCommentMusic,
+      scrapComposerMusic,
+    };
   }
 }
