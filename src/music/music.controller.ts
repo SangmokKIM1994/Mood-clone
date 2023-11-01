@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Req, UseGuards } from "@nestjs/common";
+import { Controller, Get, Param, Req, UseGuards, Query } from "@nestjs/common";
 import { ApiOperation, ApiResponse } from "@nestjs/swagger";
 import { MusicService } from "./music.service";
 import { Users } from "src/users/users.entity";
@@ -9,8 +9,22 @@ import { AuthGuard } from "@nestjs/passport";
 export class MusicController {
   constructor(private readonly musicService: MusicService) {}
 
-  @ApiOperation({ summary: "음악 조회" })
-  @ApiResponse({ status: 200, description: "음악 조회 완료" })
+  @ApiOperation({ summary: "xy좌표에 따른 음악 조회" })
+  @ApiResponse({ status: 200, description: "xy좌표에 따른 음악 조회 완료" })
+  @UseGuards(AuthGuard("jwt"))
+  @Get("/")
+  async findMusicByMood(
+    @Query() x: number,
+    y: number,
+    @Req() req: ExpressRequest & { user: Users }
+  ) {
+    const { userId } = req.user;
+    const music = await this.musicService.mood({ x, y, userId });
+    return music;
+  }
+
+  @ApiOperation({ summary: "musicId로 음악 조회" })
+  @ApiResponse({ status: 200, description: "musicId로 음악 조회 완료" })
   @UseGuards(AuthGuard("jwt"))
   @Get("/:musicId")
   async findMusicByMusicId(
