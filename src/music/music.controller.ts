@@ -36,9 +36,8 @@ export class MusicController {
     return music;
   }
 
-  @ApiOperation({ summary: "musicId로 음악 조회" })
-  @ApiResponse({ status: 200, description: "musicId로 음악 조회 완료" })
-  @UseGuards(AuthGuard("jwt"))
+  @ApiOperation({ summary: "keyword로 음악 검색" })
+  @ApiResponse({ status: 200, description: "keyword로 음악 검색 완료" })
   @Get("/:musicId")
   async searchMusic(@Query() keyword: string) {
     const music = await this.musicService.searchMusic(keyword);
