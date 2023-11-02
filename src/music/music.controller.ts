@@ -35,4 +35,13 @@ export class MusicController {
     const music = await this.musicService.findMusicByMusicId(musicId, user);
     return music;
   }
+
+  @ApiOperation({ summary: "musicId로 음악 조회" })
+  @ApiResponse({ status: 200, description: "musicId로 음악 조회 완료" })
+  @UseGuards(AuthGuard("jwt"))
+  @Get("/:musicId")
+  async searchMusic(@Query() keyword: string) {
+    const music = await this.musicService.searchMusic(keyword);
+    return music;
+  }
 }
