@@ -38,9 +38,19 @@ export class MusicController {
 
   @ApiOperation({ summary: "keyword로 음악 검색" })
   @ApiResponse({ status: 200, description: "keyword로 음악 검색 완료" })
-  @Get("/:musicId")
+  @Get("/")
   async searchMusic(@Query() keyword: string) {
     const music = await this.musicService.searchMusic(keyword);
+    return music;
+  }
+
+  @ApiOperation({ summary: "음악 맞춤 추천" })
+  @ApiResponse({ status: 200, description: "음악 맞춤 추천 완료" })
+  @UseGuards(AuthGuard("jwt"))
+  @Get("/")
+  async suggestMusic(@Req() req: ExpressRequest & { user: Users }) {
+    const { userId } = req.user;
+    const music = await this.musicService.suggestMusic(userId);
     return music;
   }
 }
