@@ -26,10 +26,6 @@ export class MusicService {
     private readonly scrapRepository: Repository<Scraps>,
     @InjectRepository(Comments)
     private readonly commentRepository: Repository<Comments>,
-    @InjectRepository(Recomments)
-    private readonly recommentsRepository: Repository<Recomments>,
-    @InjectRepository(Status)
-    private readonly statusRepository: Repository<Status>,
     private readonly elasticsearchService: ElasticsearchService
   ) {}
 
