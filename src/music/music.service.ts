@@ -8,8 +8,6 @@ import { ElasticsearchService } from "@nestjs/elasticsearch";
 import { Likes } from "src/likes/likes.entity";
 import { Scraps } from "src/scraps/scraps.entity";
 import { Comments } from "src/comments/comments.entity";
-import { Recomments } from "src/recomments/recomments.entity";
-import { Status } from "../status/status.entity";
 
 @Injectable()
 export class MusicService {
