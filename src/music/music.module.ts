@@ -12,6 +12,7 @@ import { Streamings } from "src/streamings/streamings.entity";
 import { Likes } from "src/likes/likes.entity";
 import { Scraps } from "src/scraps/scraps.entity";
 import { Comments } from "src/comments/comments.entity";
+import { ElasticsearchService } from "@nestjs/elasticsearch";
 
 @Module({
   imports: [
@@ -26,6 +27,6 @@ import { Comments } from "src/comments/comments.entity";
     ]),
   ],
   controllers: [MusicController],
-  providers: [MusicService, UsersService, S3Service, OpenAiService],
+  providers: [MusicService, UsersService, S3Service, OpenAiService,ElasticsearchService],
 })
 export class MusicModule {}
