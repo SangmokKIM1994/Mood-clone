@@ -2,6 +2,7 @@ import { NestFactory } from "@nestjs/core";
 import { AppModule } from "./app.module";
 import * as dotenv from "dotenv";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
+import { HttpExceptionFilter } from "./filters/http-exception.filter";
 
 async function bootstrap() {
   dotenv.config();
@@ -14,7 +15,7 @@ async function bootstrap() {
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup("api", app, document);
-
+  app.useGlobalFilters(new HttpExceptionFilter());
   await app.listen(PORT, () => {
     console.log(`${PORT}번 포트로 서버가 연결되었습니다.`);
   });
