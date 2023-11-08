@@ -114,103 +114,104 @@ export class MusicService {
 
   async suggestMusic(userId: number) {
     try {
-      const findRecentLike = await this.likeRepository.findOne({
-        where: { userId },
-        order: { likeId: "DESC" },
-      });
+      const randomNumber = Math.floor(Math.random() * 4) + 1;
 
-      const topLikeMusic = await this.likeRepository
-        .createQueryBuilder("like")
-        .innerJoin("like.music", "music")
-        .innerJoin("like.status", "status")
-        .select([
-          "music.musicId as musicId",
-          "music.title as title",
-          "COUNT(like.id) as likeCount",
-        ])
-        .where("status.statusId = :statusId", {
-          statusId: findRecentLike.status.statusId,
-        })
-        .groupBy("music.id")
-        .orderBy("likeCount", "DESC")
-        .limit(5)
-        .getRawMany();
+      if (randomNumber === 1) {
+        const findRecentLike = await this.likeRepository.findOne({
+          where: { userId },
+          order: { likeId: "DESC" },
+        });
+        const topLikeMusic = await this.likeRepository
+          .createQueryBuilder("like")
+          .innerJoin("like.music", "music")
+          .innerJoin("like.status", "status")
+          .select([
+            "music.musicId as musicId",
+            "music.title as title",
+            "COUNT(like.id) as likeCount",
+          ])
+          .where("status.statusId = :statusId", {
+            statusId: findRecentLike.status.statusId,
+          })
+          .groupBy("music.id")
+          .orderBy("likeCount", "DESC")
+          .limit(5)
+          .getRawMany();
 
-      const findRecentStreaming = await this.streamingRepository.findOne({
-        where: { userId },
-        order: { streamingId: "DESC" },
-      });
+        return { data: topLikeMusic };
+      } else if (randomNumber === 2) {
+        const findRecentStreaming = await this.streamingRepository.findOne({
+          where: { userId },
+          order: { streamingId: "DESC" },
+        });
 
-      const topStreamingMusic = await this.streamingRepository
-        .createQueryBuilder("streaming")
-        .innerJoin("streaming.music", "music")
-        .innerJoin("streaming.status", "status")
-        .select([
-          "music.id as musicId",
-          "music.title as title",
-          "COUNT(streaming.id) as playCount",
-        ])
-        .where("status.statusId = :statusId", {
-          statusId: findRecentStreaming.status,
-        })
-        .groupBy("music.id")
-        .orderBy("playCount", "DESC")
-        .limit(5)
-        .getRawMany();
+        const topStreamingMusic = await this.streamingRepository
+          .createQueryBuilder("streaming")
+          .innerJoin("streaming.music", "music")
+          .innerJoin("streaming.status", "status")
+          .select([
+            "music.id as musicId",
+            "music.title as title",
+            "COUNT(streaming.id) as playCount",
+          ])
+          .where("status.statusId = :statusId", {
+            statusId: findRecentStreaming.status,
+          })
+          .groupBy("music.id")
+          .orderBy("playCount", "DESC")
+          .limit(5)
+          .getRawMany();
+        return { data: topStreamingMusic };
+      } else if (randomNumber === 3) {
+        const findRecentComment = await this.commentRepository.findOne({
+          where: { userId },
+          order: { commentId: "DESC" },
+        });
 
-      const findRecentComment = await this.commentRepository.findOne({
-        where: { userId },
-        order: { commentId: "DESC" },
-      });
+        const topCommentMusic = await this.commentRepository
+          .createQueryBuilder("comment")
+          .innerJoin("comment.music", "music")
+          .innerJoin("comment.status", "status")
+          .select([
+            "music.musicId as musicId",
+            "music.title as title",
+            "COUNT(comment.id) as commentCount",
+          ])
+          .where("status.statusId = :statusId", {
+            statusId: findRecentComment.status,
+          })
+          .groupBy("music.id")
+          .orderBy("commentCount", "DESC")
+          .limit(5)
+          .getRawMany();
+        return { data: topCommentMusic };
+      } else if (randomNumber === 4) {
+        const findRecentScrap = await this.scrapRepository.findOne({
+          where: { userId },
+          order: { scrapId: "DESC" },
+        });
 
-      const topCommentMusic = await this.commentRepository
-        .createQueryBuilder("comment")
-        .innerJoin("comment.music", "music")
-        .innerJoin("comment.status", "status")
-        .select([
-          "music.musicId as musicId",
-          "music.title as title",
-          "COUNT(comment.id) as commentCount",
-        ])
-        .where("status.statusId = :statusId", {
-          statusId: findRecentComment.status,
-        })
-        .groupBy("music.id")
-        .orderBy("commentCount", "DESC")
-        .limit(5)
-        .getRawMany();
+        const scrapMusic = await this.musicRepository.findOne({
+          where: { musicId: findRecentScrap.musicId },
+          relations: ["composer"],
+        });
 
-      const findRecentScrap = await this.scrapRepository.findOne({
-        where: { userId },
-        order: { scrapId: "DESC" },
-      });
-
-      const scrapMusic = await this.musicRepository.findOne({
-        where: { musicId: findRecentScrap.musicId },
-        relations: ["composer"],
-      });
-
-      const scrapComposerMusic = await this.musicRepository
-        .createQueryBuilder("music")
-        .innerJoin("music.composer", "composer")
-        .select([
-          "music.musicId as musicId",
-          "music.title as title",
-          "composer.name as composerName",
-        ])
-        .where("composer.composerId = :composerId", {
-          composerdId: scrapMusic.composer.composerId,
-        })
-        .orderBy("music.musicId", "DESC")
-        .limit(5)
-        .getMany();
-
-      return {
-        topLikeMusic,
-        topStreamingMusic,
-        topCommentMusic,
-        scrapComposerMusic,
-      };
+        const scrapComposerMusic = await this.musicRepository
+          .createQueryBuilder("music")
+          .innerJoin("music.composer", "composer")
+          .select([
+            "music.musicId as musicId",
+            "music.title as title",
+            "composer.name as composerName",
+          ])
+          .where("composer.composerId = :composerId", {
+            composerdId: scrapMusic.composer.composerId,
+          })
+          .orderBy("music.musicId", "DESC")
+          .limit(5)
+          .getMany();
+        return { data: scrapComposerMusic };
+      }
     } catch (error) {
       throw new InternalServerErrorException("맞춤 음악 추천 중 서버 에러");
     }
