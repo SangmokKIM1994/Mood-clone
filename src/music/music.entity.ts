@@ -58,7 +58,4 @@ export class Musics {
 
   @ViewColumn({ select: false } as ViewColumnOptions)
   commentCount: number;
-
-  @ViewColumn({ select: false } as ViewColumnOptions)
-  totalScore: number;
 }
