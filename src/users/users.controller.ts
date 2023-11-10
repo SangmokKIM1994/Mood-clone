@@ -5,7 +5,6 @@ import {
   Post,
   Patch,
   Delete,
-  Param,
   Body,
   UseGuards,
   Req,

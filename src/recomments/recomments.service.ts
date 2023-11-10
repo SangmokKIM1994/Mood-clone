@@ -14,8 +14,6 @@ import { UpdateRecommentDto } from "./dto/update.recomment.dto";
 @Injectable()
 export class RecommentsService {
   constructor(
-    @InjectRepository(Users)
-    private readonly userRepository: Repository<Users>,
     @InjectRepository(Comments)
     private readonly commentRepository: Repository<Comments>,
     @InjectRepository(Recomments)
