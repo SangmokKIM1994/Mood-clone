@@ -5,7 +5,6 @@ import {
   Column,
   Entity,
   JoinColumn,
-  ManyToMany,
   ManyToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
@@ -29,6 +28,10 @@ export class Likes {
   @Column()
   musicId: number;
 
-  @ManyToMany(() => Status, (status) => status.like)
+  @ManyToOne(() => Status, (status) => status.like)
+  @JoinColumn({ name: "statusId" })
   status: Status;
+
+  @Column()
+  statusId: number;
 }

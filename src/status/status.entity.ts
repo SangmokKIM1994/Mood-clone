@@ -1,4 +1,10 @@
-import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
+import {
+  Column,
+  Entity,
+  ManyToMany,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from "typeorm";
 import { Musics } from "../music/music.entity";
 import { Scraps } from "src/scraps/scraps.entity";
 import { Likes } from "src/likes/likes.entity";
@@ -17,18 +23,18 @@ export class Status {
   @ManyToMany(() => Musics, (music) => music.status)
   music: Musics[];
 
-  @ManyToMany(() => Scraps, (scrap) => scrap.status)
+  @ManyToOne(() => Scraps, (scrap) => scrap.status)
   scrap: Scraps[];
 
-  @ManyToMany(() => Likes, (like) => like.status)
+  @ManyToOne(() => Likes, (like) => like.status)
   like: Likes[];
 
-  @ManyToMany(() => Recomments, (recomment) => recomment.status)
+  @ManyToOne(() => Recomments, (recomment) => recomment.status)
   recomment: Recomments[];
 
-  @ManyToMany(() => Comments, (comment) => comment.status)
+  @ManyToOne(() => Comments, (comment) => comment.status)
   comment: Comments[];
 
-  @ManyToMany(() => Streamings, (streaming) => streaming.status)
+  @ManyToOne(() => Streamings, (streaming) => streaming.status)
   streaming: Streamings[];
 }

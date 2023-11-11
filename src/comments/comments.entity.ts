@@ -6,7 +6,6 @@ import {
   Column,
   Entity,
   JoinColumn,
-  ManyToMany,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -42,6 +41,10 @@ export class Comments {
   @ViewColumn({ select: false } as ViewColumnOptions)
   recommentCount: number;
 
-  @ManyToMany(() => Status, (status) => status.comment)
-  status: Status[];
+  @ManyToOne(() => Status, (status) => status.comment)
+  @JoinColumn({ name: "statusId" })
+  status: Status;
+
+  @Column()
+  statusId: number;
 }
