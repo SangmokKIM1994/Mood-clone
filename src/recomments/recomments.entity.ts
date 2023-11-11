@@ -5,7 +5,6 @@ import {
   Column,
   Entity,
   JoinColumn,
-  ManyToMany,
   ManyToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
@@ -32,6 +31,10 @@ export class Recomments {
   @Column()
   commentId: number;
 
-  @ManyToMany(() => Status, (status) => status.recomment)
-  status: Status[];
+  @ManyToOne(() => Status, (status) => status.recomment)
+  @JoinColumn({ name: "statusId" })
+  status: Status;
+
+  @Column()
+  statusId: number;
 }

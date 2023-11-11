@@ -5,7 +5,6 @@ import {
   Column,
   Entity,
   JoinColumn,
-  ManyToMany,
   ManyToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
@@ -29,6 +28,10 @@ export class Streamings {
   @Column()
   musicId: number;
 
-  @ManyToMany(() => Status, (status) => status.streaming)
-  status: Status[];
+  @ManyToOne(() => Status, (status) => status.streaming)
+  @JoinColumn({ name: "statusId" })
+  status: Status;
+
+  @Column()
+  statusId: number;
 }
