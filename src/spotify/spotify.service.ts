@@ -1,15 +1,23 @@
 import { Injectable } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
 import axios, { AxiosResponse } from "axios";
 
 @Injectable()
 export class SpotifyService {
-  private readonly clientId = "YOUR_CLIENT_ID";
-  private readonly clientSecret = "YOUR_CLIENT_SECRET";
-  private readonly redirectUri = "YOUR_REDIRECT_URI";
-  private readonly base64EncodedCredentials = Buffer.from(
-    `${this.clientId}:${this.clientSecret}`
-  ).toString("base64");
+  private readonly clientId: string;
+  private readonly clientSecret: string;
+  private readonly redirectUri: string;
+  private readonly base64EncodedCredentials: string;
   private accessToken: string;
+
+  constructor(private configService: ConfigService) {
+    this.clientId = this.configService.get<string>("SPOTIFY_CLIENT_ID");
+    this.clientSecret = this.configService.get<string>("SPOTIFY_CLIENT_SECRET");
+    this.redirectUri = this.configService.get<string>("SPOTIFY_REDIRECT_URI");
+    this.base64EncodedCredentials = Buffer.from(
+      `${this.clientId}:${this.clientSecret}`
+    ).toString("base64");
+  }
 
   async getAccessToken(code: string): Promise<void> {
     const authResponse = await axios.post(
