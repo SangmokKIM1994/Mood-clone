@@ -17,7 +17,6 @@ export class OpenAiService {
         prompt: prompt,
         max_tokens: 50,
       });
-      console.log(response);
       return response.choices[0].text;
     } catch (error) {
       throw new Error(`Failed to generate text: ${error.message}`);
